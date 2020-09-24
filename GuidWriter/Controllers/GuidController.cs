@@ -1,18 +1,22 @@
-﻿using System;
+﻿using GuidWriter.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GuidWriter.Controllers
 {
-    [ApiController]
-    [Route("")]
-    [Route("Guid")]
-    public class GuidController : ControllerBase
+    [Route("guid")]
+    public class GuidController : Controller
     {
-        [Route("")]
-        [Route("Write")]
-        public string Write()
+        private readonly GuidService _guidService;
+
+        public GuidController()
         {
-            return Guid.NewGuid().ToString();
+            _guidService = new GuidService();
+        }
+
+        [HttpGet, Route("view")]
+        public ActionResult IndexView()
+        {
+            return View("Index", _guidService.Generate());
         }
     }
 }
