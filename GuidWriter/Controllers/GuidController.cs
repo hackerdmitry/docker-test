@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GuidWriter.Controllers
 {
+    [Route("")]
     [Route("guid")]
     public class GuidController : Controller
     {
@@ -14,7 +15,7 @@ namespace GuidWriter.Controllers
         }
 
         [HttpGet, Route("view")]
-        public ActionResult IndexView()
+        public ActionResult Index()
         {
             return View("Index", _guidService.Generate());
         }

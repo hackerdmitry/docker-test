@@ -5,7 +5,6 @@ namespace GuidWriter.Areas.Api
 {
     [ApiController]
     [Area("api")]
-    [Route("")]
     [Route("guid")]
     public class ApiGuidController : Controller
     {
