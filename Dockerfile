@@ -10,4 +10,4 @@ RUN dotnet publish -c Release -o /app/out
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 WORKDIR /app
 COPY --from=build-env /app/out ./
-ENTRYPOINT ["dotnet", "GuidWriter.dll"]
+ENTRYPOINT ["dotnet", "DockerTest.dll"]
