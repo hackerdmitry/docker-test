@@ -3,7 +3,7 @@ WORKDIR /app
 EXPOSE 80
 
 COPY . ./
-WORKDIR ./DockerTest
+WORKDIR ./DockerTest.Web
 RUN dotnet restore
 RUN dotnet publish -c Release -o /app/out
 
