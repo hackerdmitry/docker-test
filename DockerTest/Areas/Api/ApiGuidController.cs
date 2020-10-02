@@ -1,7 +1,7 @@
-﻿using GuidWriter.Services;
+﻿using DockerTest.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GuidWriter.Areas.Api
+namespace DockerTest.Areas.Api
 {
     [ApiController]
     [Area("api")]

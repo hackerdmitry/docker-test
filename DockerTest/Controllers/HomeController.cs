@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace GuidWriter.Controllers
+namespace DockerTest.Controllers
 {
     [Route("")]
-    public class IndexController : Controller
+    [Route("home")]
+    public class HomeController : Controller
     {
         [Route("")]
         [Route("index")]

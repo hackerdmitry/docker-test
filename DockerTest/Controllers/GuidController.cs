@@ -1,7 +1,7 @@
-﻿using GuidWriter.Services;
+﻿using DockerTest.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GuidWriter.Controllers
+namespace DockerTest.Controllers
 {
     [Route("")]
     [Route("guid")]

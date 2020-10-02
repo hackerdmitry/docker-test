@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  server:
+    image: docker_test_backend
+    ports:
+      - 8000:80
+    build: .
+    links:
+      - db
+    volumes:
+      - ./files/:/app/wwwroot/files/
+    networks:
+      - local
+
+  db:
+    restart: always
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=dockerTestDB
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./database/pg/:/var/lib/postgresql/data/
+    ports:
+      - 127.0.0.1:5432:5432
+    networks:
+      - local
