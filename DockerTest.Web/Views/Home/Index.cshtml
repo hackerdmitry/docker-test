@@ -1,0 +1,16 @@
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Home";
+}
+
+<div class="text-center mt-5">
+    <div class="btn-toolbar">
+        <div class="input-group-text">Практика #1. Контейнеризация и Docker. Генерация GUID</div>
+        @Html.ActionLink("Перейти", "Index", "Guid", null, new {@class = "btn btn-primary btn-group ml-2"})
+    </div>
+
+    <div class="btn-toolbar mt-2">
+        <div class="input-group-text">Практика #2. Взаимодействие контейнеров. Сохранение полей в БД</div>
+        @Html.ActionLink("Перейти", "Index", "Note", null, new {@class = "btn btn-primary btn-group ml-2"})
+    </div>
+</div>

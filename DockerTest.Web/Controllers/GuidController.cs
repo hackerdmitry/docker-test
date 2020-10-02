@@ -1,9 +1,8 @@
-﻿using DockerTest.Services;
+﻿using DockerTest.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DockerTest.Controllers
+namespace DockerTest.Web.Controllers
 {
-    [Route("")]
     [Route("guid")]
     public class GuidController : Controller
     {

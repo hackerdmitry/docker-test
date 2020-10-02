@@ -5,10 +5,12 @@
     <link rel="stylesheet" href="~/bootstrap-4.5.0-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="~/bootstrap-4.5.0-dist/css/bootstrap-grid.min.css">
     <link rel="stylesheet" href="~/bootstrap-4.5.0-dist/css/bootstrap-reboot.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
-<body>
+<body class="container">
 
 @RenderBody()
 
+@await RenderSectionAsync("Scripts", false)
 </body>
 </html>

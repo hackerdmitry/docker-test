@@ -1,6 +1,6 @@
 using System;
 
-namespace DockerTest.Services
+namespace DockerTest.Web.Services
 {
     public class GuidService
     {

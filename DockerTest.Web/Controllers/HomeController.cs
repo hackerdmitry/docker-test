@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace DockerTest.Controllers
+namespace DockerTest.Web.Controllers
 {
     [Route("")]
     [Route("home")]
@@ -10,7 +10,7 @@ namespace DockerTest.Controllers
         [Route("index")]
         public ActionResult Index()
         {
-            return RedirectToAction("Index", "Guid");
+            return View("Index");
         }
     }
 }

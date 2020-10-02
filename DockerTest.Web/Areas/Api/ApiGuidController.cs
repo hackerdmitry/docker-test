@@ -1,7 +1,7 @@
-﻿using DockerTest.Services;
+﻿using DockerTest.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DockerTest.Areas.Api
+namespace DockerTest.Web.Areas.Api
 {
     [ApiController]
     [Area("api")]
