@@ -5,11 +5,14 @@ services:
     image: docker_test_backend
     ports:
       - 8000:80
-    build: .
+    build: ./Server
     links:
       - db
+      - rabbitmq
     volumes:
       - ./files/:/app/wwwroot/files/
+    depends_on:
+      - rabbitmq
 
   db:
     restart: always
@@ -21,4 +24,18 @@ services:
     volumes:
       - ./database/pg/:/var/lib/postgresql/data/
     ports:
-      - 127.0.0.1:32768:5432
+      - 5432:5432
+
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - 127.0.0.1:5672:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: "hackerdmitry"
+      RABBITMQ_DEFAULT_PASS: "e2b72411-ebb9-40ab-8add-40f6fab4fce5"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:15672" ]
+      interval: 10s
+      timeout: 10s
+      retries: 6

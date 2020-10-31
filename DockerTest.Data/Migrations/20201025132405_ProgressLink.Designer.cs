@@ -3,15 +3,17 @@ using System;
 using DockerTest.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DockerTest.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201025132405_ProgressLink")]
+    partial class ProgressLink
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,14 +38,14 @@ namespace DockerTest.Data.Migrations
                         .HasColumnType("character varying(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("LinkStatus")
+                    b.Property<int?>("Progress")
                         .HasColumnType("integer");
 
                     b.Property<int?>("Status")
                         .HasColumnType("integer");
 
-                    b.Property<double>("Tact")
-                        .HasColumnType("double precision");
+                    b.Property<int>("Tact")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

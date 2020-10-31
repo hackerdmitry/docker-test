@@ -7,6 +7,6 @@ namespace DockerTest.Data
     {
         public ApplicationDbContext(DbContextOptions options) : base(options) { }
 
-        public DbSet<Note> Notes { get; set; }
+        public DbSet<Link> Notes { get; set; }
     }
 }

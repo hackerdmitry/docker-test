@@ -4,6 +4,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockerTest.Web", "DockerTes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockerTest.Data", "DockerTest.Data\DockerTest.Data.csproj", "{9A129CCF-167E-4859-92E1-3695A091123F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Jobs", "Jobs", "{5FE2E7D0-44C8-461B-88FF-4527F3E58F9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jobs.LinkConsumer", "Jobs.LinkConsumer\Jobs.LinkConsumer.csproj", "{6C023B26-53E7-420D-8924-075863AD6176}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jobs.Core", "Jobs.Core\Jobs.Core.csproj", "{AD863D91-BE0A-4B6E-BAC6-0DD0A82779B8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +24,17 @@ Global
 		{9A129CCF-167E-4859-92E1-3695A091123F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A129CCF-167E-4859-92E1-3695A091123F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A129CCF-167E-4859-92E1-3695A091123F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C023B26-53E7-420D-8924-075863AD6176}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C023B26-53E7-420D-8924-075863AD6176}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C023B26-53E7-420D-8924-075863AD6176}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C023B26-53E7-420D-8924-075863AD6176}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD863D91-BE0A-4B6E-BAC6-0DD0A82779B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD863D91-BE0A-4B6E-BAC6-0DD0A82779B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD863D91-BE0A-4B6E-BAC6-0DD0A82779B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD863D91-BE0A-4B6E-BAC6-0DD0A82779B8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6C023B26-53E7-420D-8924-075863AD6176} = {5FE2E7D0-44C8-461B-88FF-4527F3E58F9D}
+		{AD863D91-BE0A-4B6E-BAC6-0DD0A82779B8} = {5FE2E7D0-44C8-461B-88FF-4527F3E58F9D}
 	EndGlobalSection
 EndGlobal
