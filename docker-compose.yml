@@ -1,11 +1,25 @@
 version: "3.8"
 
 services:
+  consumer:
+    image: link_consumer
+    build:
+      context: .
+      dockerfile: ./Jobs.LinkConsumer/Dockerfile
+    links:
+      - db
+      - rabbitmq
+    depends_on:
+      - rabbitmq
+      - server
+
   server:
     image: docker_test_backend
     ports:
       - 8000:80
-    build: ./Server
+    build:
+      context: .
+      dockerfile: ./DockerTest.Web/Dockerfile
     links:
       - db
       - rabbitmq
@@ -24,12 +38,12 @@ services:
     volumes:
       - ./database/pg/:/var/lib/postgresql/data/
     ports:
-      - 5432:5432
+      - 127.0.0.1:5432:5432
 
   rabbitmq:
     image: rabbitmq:management
     ports:
-      - 127.0.0.1:5672:5672
+      - 5672:5672
       - 15672:15672
     environment:
       RABBITMQ_DEFAULT_USER: "hackerdmitry"
