@@ -83,8 +83,8 @@ namespace DockerTest.Web
                 foreach (var link in links)
                 {
                     var linkEvent = new LinkEvent {Id = link.Id};
-                    rabbitMqService.SendLinkEvent(linkEvent);
-                    link.LinkStatus = LinkStatus.Queue;
+                    var successfullySent = rabbitMqService.SendLinkEvent(linkEvent);
+                    link.LinkStatus = successfullySent ? LinkStatus.Queue : LinkStatus.Waiting;
                 }
 
                 uow.Commit();

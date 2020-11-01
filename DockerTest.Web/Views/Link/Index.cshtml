@@ -65,9 +65,23 @@
         <div class="form-group row" style="align-items: center;">
             <div class="input-group-text">@link.Href</div>
             <div class="input-group-text border @(textColor) ml-2">@valueColor</div>
-            @if (link.LinkStatus == LinkStatus.Processing)
+            @switch (link.LinkStatus)
             {
-                <div class="input-group-text border border-primary text-primary ml-2">В обработке</div>
+                case LinkStatus.Waiting:
+                {
+                    <div class="input-group-text border border-secondary text-secondary ml-2">В ожидании</div>
+                    break;
+                }
+                case LinkStatus.Queue:
+                {
+                    <div class="input-group-text border border-primary text-info ml-2">В очереди</div>
+                    break;
+                }
+                case LinkStatus.Processing:
+                {
+                    <div class="input-group-text border border-primary text-primary ml-2">В обработке</div>
+                    break;
+                }
             }
             @if (link.Status is null)
             {

@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
   consumer:
+    restart: always
     image: link_consumer
     build:
       context: .
@@ -14,6 +15,7 @@ services:
       - server
 
   server:
+    restart: always
     image: docker_test_backend
     ports:
       - 8000:80

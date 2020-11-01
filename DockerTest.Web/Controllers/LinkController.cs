@@ -28,7 +28,10 @@ namespace DockerTest.Web.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var links = _linkRepository.GetAll().OrderBy(x => x.Id).ToArray();
+            var links = _linkRepository.GetAll()
+               .OrderBy(x => x.LinkStatus == LinkStatus.Done ? 1 : 0)
+               .ThenBy(x => x.Id)
+               .ToArray();
             return View("Index", links);
         }
 
@@ -61,8 +64,8 @@ namespace DockerTest.Web.Controllers
             uow.Commit();
 
             var linkEvent = new LinkEvent{Id = link.Id};
-            _rabbitMqService.SendLinkEvent(linkEvent);
-            link.LinkStatus = LinkStatus.Queue;
+            var successfullySent = _rabbitMqService.SendLinkEvent(linkEvent);
+            link.LinkStatus = successfullySent ? LinkStatus.Queue : LinkStatus.Waiting;
             uow.Commit();
 
             return RedirectToAction("Index");

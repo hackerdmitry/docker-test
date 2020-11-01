@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -40,11 +41,7 @@ namespace Jobs.LinkConsumer
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
-                channel.QueueDeclare(queue: _configuration.QueueName,
-                    durable: true,
-                    exclusive: false,
-                    autoDelete: false,
-                    arguments: null);
+                channel.QueueDeclarePassive(_configuration.QueueName);
 
                 channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
@@ -91,12 +88,13 @@ namespace Jobs.LinkConsumer
                 uow.Commit();
             }
 
-            for (var i = link.CurrentStep; i < link.CountStep; i++)
+            for (; link.CurrentStep < link.CountStep;)
             {
                 await Task.Delay(TimeSpan.FromSeconds(link.Tact));
                 using (var uow = _unitOfWorkFactory.GetUoW())
                 {
-                    link.CurrentStep = i + 1;
+                    link.LinkStatus = LinkStatus.Processing;
+                    link.CurrentStep++;
                     uow.Commit();
                 }
             }
