@@ -15,6 +15,7 @@ services:
       - server
 
   server:
+    restart: on-failure
     image: docker_test_backend
     ports:
       - 8000:80
@@ -50,6 +51,7 @@ services:
       RABBITMQ_DEFAULT_USER: "hackerdmitry"
       RABBITMQ_DEFAULT_PASS: "e2b72411-ebb9-40ab-8add-40f6fab4fce5"
     healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:15672" ]
       interval: 10s
       timeout: 10s
       retries: 6
