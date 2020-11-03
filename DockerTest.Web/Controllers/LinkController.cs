@@ -1,11 +1,13 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using DockerTest.Data.Entities;
 using DockerTest.Data.Events;
 using DockerTest.Data.Infrastructure.Interfaces;
 using DockerTest.Web.Configurations;
 using DockerTest.Web.Services;
 using Microsoft.AspNetCore.Mvc;
+using RestSharp;
 
 namespace DockerTest.Web.Controllers
 {
@@ -69,6 +71,31 @@ namespace DockerTest.Web.Controllers
             uow.Commit();
 
             return RedirectToAction("Index");
+        }
+
+        [HttpPut, Route("step")]
+        public async Task<bool> Update(int id)
+        {
+            var link = _linkRepository.GetAll().FirstOrDefault(x => x.Id == id);
+            if (link.CurrentStep >= link.CountStep) return false;
+
+            using var uow = _unitOfWorkFactory.GetUoW();
+            link.LinkStatus = LinkStatus.Processing;
+            link.CurrentStep++;
+            uow.Commit();
+
+            if (link.CurrentStep == link.CountStep)
+            {
+                var client = new RestClient($"http://{link.Href}") {Timeout = -1};
+                var request = new RestRequest(Method.GET);
+                var response = await client.ExecuteAsync(request);
+                link.Status = (int?) response.StatusCode;
+                link.LinkStatus = LinkStatus.Done;
+                uow.Commit();
+                return true;
+            }
+
+            return false;
         }
 
         [HttpDelete, Route("delete")]

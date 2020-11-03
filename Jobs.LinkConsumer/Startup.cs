@@ -9,12 +9,12 @@ namespace Jobs.LinkConsumer
     {
         protected override IContainer ConfigureServices(IConfigurationRoot configuration)
         {
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
             var rabbitMqSettings = configuration.GetSection("RabbitMqConfiguration").Get<RabbitMqConfiguration>();
+            var globalSettings = configuration.GetSection("GlobalSettings").Get<GlobalSettings>();
 
             var builder = new ContainerBuilder();
             builder.RegisterInstance(rabbitMqSettings);
-            builder.RegisterModule(new DataModule(connectionString));
+            builder.RegisterInstance(globalSettings);
             builder.RegisterType<LinkHandler>();
 
             var container = builder.Build();

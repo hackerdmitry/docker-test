@@ -1,12 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using DockerTest.Data.Entities;
 using DockerTest.Data.Events;
-using DockerTest.Data.Infrastructure.Interfaces;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -17,16 +13,13 @@ namespace Jobs.LinkConsumer
     public class LinkHandler
     {
         private readonly RabbitMqConfiguration _configuration;
-        private readonly IRepository<Link> _linkRepository;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly GlobalSettings _globalSettings;
 
         public LinkHandler(RabbitMqConfiguration configuration,
-                           IRepository<Link> linkRepository,
-                           IUnitOfWorkFactory unitOfWorkFactory)
+                           GlobalSettings globalSettings)
         {
             _configuration = configuration;
-            _linkRepository = linkRepository;
-            _unitOfWorkFactory = unitOfWorkFactory;
+            _globalSettings = globalSettings;
         }
 
         public async Task HandleAsync()
@@ -76,39 +69,14 @@ namespace Jobs.LinkConsumer
 
         private async Task HandleLinkEventAsync(LinkEvent @event)
         {
-            var link = _linkRepository.GetAll().FirstOrDefault(x => x.Id == @event.Id);
-            if (link == null)
+            var client = new RestClient($"http://{_globalSettings.PublicHost}/step?id={@event.Id}") {Timeout = -1};
+            var request = new RestRequest(Method.PUT);
+            IRestResponse response;
+            do
             {
-                throw new Exception($"Not found event with id={@event.Id}");
+                response = await client.ExecuteAsync(request);
             }
-
-            using (var uow = _unitOfWorkFactory.GetUoW())
-            {
-                link.LinkStatus = LinkStatus.Processing;
-                uow.Commit();
-            }
-
-            for (; link.CurrentStep < link.CountStep;)
-            {
-                await Task.Delay(TimeSpan.FromSeconds(link.Tact));
-                using (var uow = _unitOfWorkFactory.GetUoW())
-                {
-                    link.LinkStatus = LinkStatus.Processing;
-                    link.CurrentStep++;
-                    uow.Commit();
-                }
-            }
-
-            using (var uow = _unitOfWorkFactory.GetUoW())
-            {
-                var client = new RestClient($"http://{link.Href}") {Timeout = -1};
-                var request = new RestRequest(Method.GET);
-                var response = await client.ExecuteAsync(request);
-                link.Status = (int?) response.StatusCode;
-                link.CurrentStep = link.CountStep;
-                link.LinkStatus = LinkStatus.Done;
-                uow.Commit();
-            }
+            while (response.IsSuccessful && bool.Parse(response.Content));
         }
     }
 }
