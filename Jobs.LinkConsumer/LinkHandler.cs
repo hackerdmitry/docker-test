@@ -71,12 +71,21 @@ namespace Jobs.LinkConsumer
         {
             var client = new RestClient($"http://{_globalSettings.PublicHost}/step?id={@event.Id}") {Timeout = -1};
             var request = new RestRequest(Method.PUT);
-            IRestResponse response;
             do
             {
-                response = await client.ExecuteAsync(request);
+                var response = await client.ExecuteAsync(request);
+                if (response.IsSuccessful)
+                {
+                    var tact = double.Parse(response.Content);
+                    if (tact == -1)
+                    {
+                        break;
+                    }
+
+                    await Task.Delay((int) (tact * 1000));
+                }
             }
-            while (response.IsSuccessful && bool.Parse(response.Content));
+            while (true);
         }
     }
 }

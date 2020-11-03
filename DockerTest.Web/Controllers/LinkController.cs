@@ -74,10 +74,13 @@ namespace DockerTest.Web.Controllers
         }
 
         [HttpPut, Route("step")]
-        public async Task<bool> Update(int id)
+        public async Task<double> Update(int id)
         {
             var link = _linkRepository.GetAll().FirstOrDefault(x => x.Id == id);
-            if (link.CurrentStep >= link.CountStep) return false;
+            if (link.CurrentStep >= link.CountStep)
+            {
+                return -1;
+            }
 
             using var uow = _unitOfWorkFactory.GetUoW();
             link.LinkStatus = LinkStatus.Processing;
@@ -92,10 +95,10 @@ namespace DockerTest.Web.Controllers
                 link.Status = (int?) response.StatusCode;
                 link.LinkStatus = LinkStatus.Done;
                 uow.Commit();
-                return true;
+                return link.Tact;
             }
 
-            return false;
+            return -1;
         }
 
         [HttpDelete, Route("delete")]
