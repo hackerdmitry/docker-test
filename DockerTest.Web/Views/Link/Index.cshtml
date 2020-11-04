@@ -13,10 +13,10 @@
         var value = status?.ToString();
         return xx switch {
             0 => ("border-danger text-info", "Не найдено"),
-            2 => ("border-success text-success", value),
-            3 => ("border-warning text-warning", value),
-            4 => ("border-danger text-warning", value),
-            5 => ("border-danger text-danger", value),
+            2 => ("bg-success text-white", value),
+            3 => ("bg-primary text-white", value),
+            4 => ("bg-warning text-white", value),
+            5 => ("bg-danger text-white", value),
             _ => ("border-dark text-dark", "???")
             };
     }
