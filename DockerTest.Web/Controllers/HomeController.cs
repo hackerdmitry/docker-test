@@ -1,11 +1,13 @@
+using DockerTest.Web.Controllers.Common;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DockerTest.Web.Controllers
 {
     [Route("")]
     [Route("home")]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
+        [HttpGet]
         [Route("")]
         [Route("index")]
         public ActionResult Index()

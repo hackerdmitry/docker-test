@@ -4,8 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DockerTest.Web.Areas.Api
 {
     [ApiController]
-    [Area("api")]
-    [Route("guid")]
+    [Route("api/guid")]
     public class ApiGuidController : Controller
     {
         private readonly GuidService _guidService;
@@ -15,8 +14,7 @@ namespace DockerTest.Web.Areas.Api
             _guidService = new GuidService();
         }
 
-        [Route("")]
-        [Route("write")]
+        [HttpGet, Route("")]
         public string Write()
         {
             return _guidService.Generate();

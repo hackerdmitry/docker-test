@@ -69,7 +69,7 @@ namespace Jobs.LinkConsumer
 
         private async Task HandleLinkEventAsync(LinkEvent @event)
         {
-            var client = new RestClient($"http://{_globalSettings.PublicHost}/step?id={@event.Id}") {Timeout = -1};
+            var client = new RestClient($"{_globalSettings.PublicHost}/api/link/step?id={@event.Id}") {Timeout = -1};
             var request = new RestRequest(Method.PUT);
             do
             {
@@ -83,6 +83,11 @@ namespace Jobs.LinkConsumer
                     }
 
                     await Task.Delay((int) (tact * 1000));
+                }
+                else
+                {
+                    Console.WriteLine($" [!] Not successful - {response.StatusCode}");
+                    break;
                 }
             }
             while (true);
