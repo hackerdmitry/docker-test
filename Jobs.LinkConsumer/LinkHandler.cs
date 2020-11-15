@@ -2,7 +2,8 @@ using System;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using DockerTest.Data.Events;
+using Jobs.LinkConsumer.Configurations;
+using Jobs.LinkConsumer.Events;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -34,6 +35,8 @@ namespace Jobs.LinkConsumer
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
+                Console.WriteLine(" [x] Connected to RabbitMQ");
+
                 channel.QueueDeclarePassive(_configuration.QueueName);
 
                 channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
@@ -69,28 +72,37 @@ namespace Jobs.LinkConsumer
 
         private async Task HandleLinkEventAsync(LinkEvent @event)
         {
-            var client = new RestClient($"{_globalSettings.PublicHost}/api/link/step?id={@event.Id}") {Timeout = -1};
-            var request = new RestRequest(Method.PUT);
-            do
+            for (var i = 0; i < 5; i++)
             {
-                var response = await client.ExecuteAsync(request);
-                if (response.IsSuccessful)
+                var uri = $"{_globalSettings.PublicHost}/api/link/step?id={@event.Id}";
+                Console.WriteLine($"Попытка #{i + 1}: {uri}");
+                var client = new RestClient(uri) {Timeout = -1};
+                var request = new RestRequest(Method.PUT);
+                do
                 {
-                    var tact = double.Parse(response.Content);
-                    if (tact == -1)
+                    var response = await client.ExecuteAsync(request);
+                    if (response.IsSuccessful)
                     {
+                        var tact = double.Parse(response.Content);
+                        if (tact == -1)
+                        {
+                            goto taskSuccess;
+                        }
+
+                        await Task.Delay((int) (tact * 1000));
+                    }
+                    else
+                    {
+                        Console.WriteLine($" [!] Not successful - {response.StatusCode}");
                         break;
                     }
+                }
+                while (true);
 
-                    await Task.Delay((int) (tact * 1000));
-                }
-                else
-                {
-                    Console.WriteLine($" [!] Not successful - {response.StatusCode}");
-                    break;
-                }
+                await Task.Delay(5000);
             }
-            while (true);
+
+            taskSuccess: ;
         }
     }
 }

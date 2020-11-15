@@ -1,4 +1,4 @@
-namespace Jobs.LinkConsumer
+namespace Jobs.LinkConsumer.Configurations
 {
     public class GlobalSettings
     {

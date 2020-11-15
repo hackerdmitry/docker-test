@@ -1,6 +1,6 @@
 using Autofac;
-using DockerTest.Data;
 using Jobs.Core;
+using Jobs.LinkConsumer.Configurations;
 using Microsoft.Extensions.Configuration;
 
 namespace Jobs.LinkConsumer

@@ -1,4 +1,4 @@
-namespace DockerTest.Data.Events
+namespace Jobs.LinkConsumer.Events
 {
     public class LinkEvent
     {

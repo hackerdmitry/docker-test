@@ -10,6 +10,7 @@ services:
     links:
       - db
       - rabbitmq
+      - server
     depends_on:
       - rabbitmq
       - server
