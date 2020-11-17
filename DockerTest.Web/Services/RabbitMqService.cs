@@ -16,17 +16,6 @@ namespace DockerTest.Web.Services
         public RabbitMqService(RabbitMqConfiguration configuration)
         {
             _configuration = configuration;
-        }
-
-        public bool SendLinkEvent(LinkEvent linkEvent)
-        {
-            var success = Publish("link_queue", linkEvent, 5);
-            return success;
-        }
-
-        private bool Publish(string queueName, object messageObject, int messageLength = -1)
-        {
-            var arguments = messageLength == -1 ? null : new Dictionary<string, object> {{"x-max-length", messageLength}};
 
             var factory = new ConnectionFactory
             {
@@ -37,9 +26,28 @@ namespace DockerTest.Web.Services
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
-                QueueDeclare(channel,
-                    queueName,
-                    arguments: arguments);
+                QueueDeclare(channel, _configuration.LinkQueueName);
+            }
+        }
+
+        public bool SendLinkEvent(LinkEvent linkEvent)
+        {
+            var success = Publish("link_queue", linkEvent, 5);
+            return success;
+        }
+
+        private bool Publish(string queueName, object messageObject, int messageLength = -1)
+        {
+            var factory = new ConnectionFactory
+            {
+                HostName = _configuration.Host,
+                UserName = _configuration.Username,
+                Password = _configuration.Password
+            };
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
+            {
+                QueueDeclare(channel, queueName);
 
                 if (messageLength != -1 && channel.MessageCount(queueName) < messageLength)
                 {
