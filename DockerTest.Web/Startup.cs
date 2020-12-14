@@ -97,7 +97,7 @@ namespace DockerTest.Web
             using (var uow = unitOfWorkFactory.GetUoW())
             {
                 var links = linkRepository.GetAll()
-                   .Where(x => x.LinkStatus != LinkStatus.Done)
+                   .Where(x => x.LinkStatus == LinkStatus.Waiting)
                    .ToArray();
 
                 foreach (var link in links)

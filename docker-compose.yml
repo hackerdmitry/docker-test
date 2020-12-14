@@ -1,6 +1,21 @@
 version: "3.8"
 
 services:
+  nginx:
+    image: nginx
+    ports:
+      - 80:80
+    environment:
+      - NGINX_PORT=80
+    build: nginx/
+    restart: on-failure
+    links:
+      - server_1
+      - server_2
+    depends_on:
+      - server_1
+      - server_2
+
   consumer:
     restart: on-failure
     image: link_consumer
@@ -10,16 +25,26 @@ services:
     links:
       - db
       - rabbitmq
-      - server
     depends_on:
       - rabbitmq
-      - server
 
-  server:
+  server_1:
     restart: on-failure
     image: docker_test_backend
-    ports:
-      - 8000:80
+    build:
+      context: .
+      dockerfile: ./DockerTest.Web/Dockerfile
+    links:
+      - db
+      - rabbitmq
+    volumes:
+      - ./files/:/app/wwwroot/files/
+    depends_on:
+      - rabbitmq
+
+  server_2:
+    restart: on-failure
+    image: docker_test_backend
     build:
       context: .
       dockerfile: ./DockerTest.Web/Dockerfile
