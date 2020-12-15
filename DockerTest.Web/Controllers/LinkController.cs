@@ -65,7 +65,7 @@ namespace DockerTest.Web.Controllers
             _linkRepository.Add(link);
             uow.Commit();
 
-            var linkEvent = new LinkEvent{Id = link.Id};
+            var linkEvent = new LinkEvent { Id = link.Id, Href = link.Href };
             var successfullySent = _rabbitMqService.SendLinkEvent(linkEvent);
             link.LinkStatus = successfullySent ? LinkStatus.Queue : LinkStatus.Waiting;
             uow.Commit();

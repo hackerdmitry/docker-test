@@ -39,6 +39,8 @@ services:
       - rabbitmq
     volumes:
       - ./files/:/app/wwwroot/files/
+    ports:
+      - 80
     depends_on:
       - rabbitmq
 
@@ -53,6 +55,8 @@ services:
       - rabbitmq
     volumes:
       - ./files/:/app/wwwroot/files/
+    ports:
+      - 80
     depends_on:
       - rabbitmq
 
@@ -81,3 +85,10 @@ services:
       interval: 10s
       timeout: 10s
       retries: 6
+
+  redis:
+    image: redis
+    ports:
+    - 127.0.0.1:6379:6379
+#    environment:
+#      REDIS_PASSWORD: "50515410-a1f7-41ee-b657-13082cd706f7"

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using DockerTest.Data.Entities;
@@ -23,31 +24,38 @@ namespace DockerTest.Web.Areas.Api
 
 
         [HttpPut, Route("step")]
-        public async Task<double> Update([FromQuery] int id)
+        public async Task<double> Update([FromQuery] int id,
+                                         [FromBody] LinkResponse response)
         {
-            var link = _linkRepository.GetAll().FirstOrDefault(x => x.Id == id);
-            if (link == null || link.CurrentStep >= link.CountStep)
-            {
-                return -1;
-            }
+            Console.WriteLine($"Принято: id={id} response={response?.StatusCode}");
 
             using var uow = _unitOfWorkFactory.GetUoW();
-            link.LinkStatus = LinkStatus.Processing;
-            link.CurrentStep++;
-            uow.Commit();
-
-            if (link.CurrentStep == link.CountStep)
+            var link = _linkRepository.GetAll().FirstOrDefault(x => x.Id == id);
+            if (link != null && response?.StatusCode != null)
             {
-                var client = new RestClient($"http://{link.Href}") {Timeout = -1};
-                var request = new RestRequest(Method.GET);
-                var response = await client.ExecuteAsync(request);
-                link.Status = (int?) response.StatusCode;
+                link.Status = response.StatusCode;
                 link.LinkStatus = LinkStatus.Done;
                 uow.Commit();
                 return -1;
             }
 
-            return link.Tact;
+            if (link == null || link.CurrentStep >= link.CountStep)
+            {
+                return -1;
+            }
+
+            link.LinkStatus = LinkStatus.Processing;
+            link.CurrentStep++;
+            uow.Commit();
+
+            return link.CurrentStep == link.CountStep
+                ? -1
+                : link.Tact;
+        }
+
+        public class LinkResponse
+        {
+            public int? StatusCode { get; set; }
         }
     }
 }

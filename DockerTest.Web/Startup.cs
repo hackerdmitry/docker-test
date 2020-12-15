@@ -38,7 +38,7 @@ namespace DockerTest.Web
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo {Title = "docker-test API", Version = "v1"});
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "docker-test API", Version = "v1" });
                 c.DocumentFilter<ApiDocumentFilter>();
             });
             services.AddSwaggerGenNewtonsoftSupport();
@@ -70,8 +70,6 @@ namespace DockerTest.Web
 
             app.UseEndpoints(endpoints =>
             {
-                // endpoints.MapControllers();
-
                 endpoints.MapControllerRoute("apiRoute", "api/{controller}/{action}");
                 endpoints.MapControllerRoute("apiControllerRoute", "api/{controller}");
                 endpoints.MapControllerRoute("apiActionRoute", "api/");
@@ -102,7 +100,7 @@ namespace DockerTest.Web
 
                 foreach (var link in links)
                 {
-                    var linkEvent = new LinkEvent {Id = link.Id};
+                    var linkEvent = new LinkEvent { Id = link.Id, Href = link.Href };
                     var successfullySent = rabbitMqService.SendLinkEvent(linkEvent);
                     link.LinkStatus = successfullySent ? LinkStatus.Queue : LinkStatus.Waiting;
                 }
